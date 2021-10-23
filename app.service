@@ -4,7 +4,7 @@ Description=silpohack
 [Service]
 User=root
 WorkingDirectory=/root/code/silpohack
-ExecStart=python3 main.py
+ExecStart=uvicorn main:app --reload
 Restart=always
 
 [Install]
