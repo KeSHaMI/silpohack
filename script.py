@@ -37,6 +37,7 @@ async def main():
         is_organic=True,
         is_vegetarian=False,
         is_vegan=False,
+        utilize='Metal',
     )
 
     for comp in components:
