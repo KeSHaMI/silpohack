@@ -9,18 +9,18 @@ async def main():
     components = [
         Component(
             name='Fake',
-            positivity='green',
+            is_healthy=True,
             description='some description'
         ),
         Component(
             name='Fake2',
-            positivity='red',
-            description='some description2'
+            is_healthy=False,
+            description='some description 2'
         ),
         Component(
             name='Fake3',
-            positivity='green',
-            description='some description3'
+            is_healthy=True,
+            description='some description 3'
         )
     ]
 

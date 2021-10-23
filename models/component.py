@@ -20,7 +20,7 @@ class Component(ormar.Model):
     ]
 
     id: int = ormar.Integer(primary_key=True, autoincrement=True)
-    positivity: str = ormar.String(max_length=8, choices=POSITIVITY_CHOICES)
+    is_healthy = ormar.Boolean()
     name: str = ormar.Text(index=True)
     description: str = ormar.Text()
     is_blacklisted: bool = ormar.Boolean(pydantic_only=True, default=False)

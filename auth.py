@@ -16,8 +16,10 @@ class FakeAuth(BaseHTTPMiddleware):
             try:
                 user = await User.objects.get(id=user_id)
             except ormar.NoMatch:
+                user = await User.objects.create()
+                request.scope.update({'authenticated_user': user})
                 resp: Response = await call_next(request)
-                resp.delete_cookie(settings.SESSION_COOKIE_NAME)
+                resp.set_cookie(settings.SESSION_COOKIE_NAME, user.id)
                 return resp
             request.scope.update({'authenticated_user': user})
         else:
