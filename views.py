@@ -21,7 +21,7 @@ async def get_product(request: Request, barcode: str):
     return product
 
 
-@router.get('/blacklist', response_model=List[Component.get_pydantic(include={'id', 'name', 'is_blacklisted'})])
+@router.get('/blacklist', response_model=List[Component.get_pydantic(include={'id', 'name'})])
 async def user_blacklist(request: Request):
     user: User = request.scope.get('authenticated_user')
     blacklist = user.blacklist
