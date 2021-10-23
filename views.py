@@ -16,8 +16,12 @@ router = APIRouter()
 async def get_product(request: Request, barcode: str):
     user: User = request.scope.get('authenticated_user')
     product: Product = await get_product_by_barcode(barcode)
+    healthy_count = 0
     for comp in product.components:
         comp.is_blacklisted = comp.id in user.blacklist
+        if comp.is_healthy:
+            healthy_count += 1
+    product.healthy_components_percentage = healthy_count / len(product.components) * 100
     return product
 
 

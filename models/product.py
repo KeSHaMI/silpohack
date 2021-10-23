@@ -42,5 +42,7 @@ class Product(ormar.Model):
 
     components: List[Component.get_pydantic()] = ormar.ManyToMany(Component)
 
+    healthy_components_percentage: float = ormar.Float(pydantic_only=True, default=0.0)
+
 
 Product.update_forward_refs()
