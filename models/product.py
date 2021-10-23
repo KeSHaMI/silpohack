@@ -44,7 +44,7 @@ class Product(ormar.Model):
 
     components: List[component_relation_serializer] = ormar.ManyToMany(Component)
 
-    healthy_components_percentage: float = ormar.Float(pydantic_only=True, default=0.0)
+    healthy_components_percentage: str = ormar.String(pydantic_only=True, default="0.0", max_length=6)
 
     @validator('proteins', 'fats', 'carbohydrates', 'calories', 'mass', 'price')
     def convert_to_string(cls, v):
