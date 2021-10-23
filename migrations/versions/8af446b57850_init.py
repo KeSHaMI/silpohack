@@ -1,8 +1,8 @@
 """init
 
-Revision ID: eb95e4544336
+Revision ID: 8af446b57850
 Revises: 
-Create Date: 2021-10-23 20:44:52.465108
+Create Date: 2021-10-23 23:15:41.007258
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'eb95e4544336'
+revision = '8af446b57850'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,16 +29,19 @@ def upgrade():
     op.create_table('product',
     sa.Column('barcode', sa.String(length=15), nullable=False),
     sa.Column('name', sa.Text(), nullable=False),
-    sa.Column('proteins', sa.DECIMAL(precision=10, scale=5), nullable=True),
-    sa.Column('fats', sa.DECIMAL(precision=10, scale=5), nullable=True),
-    sa.Column('carbohydrates', sa.DECIMAL(precision=10, scale=5), nullable=True),
-    sa.Column('calories', sa.DECIMAL(precision=10, scale=5), nullable=True),
-    sa.Column('mass', sa.DECIMAL(precision=10, scale=5), nullable=True),
+    sa.Column('proteins', sa.Float(), nullable=False),
+    sa.Column('fats', sa.Float(), nullable=False),
+    sa.Column('carbohydrates', sa.Float(), nullable=False),
+    sa.Column('calories', sa.Float(), nullable=False),
+    sa.Column('mass', sa.Float(), nullable=False),
+    sa.Column('price', sa.Float(), nullable=True),
     sa.Column('package', sa.Text(), nullable=False),
+    sa.Column('utilize', sa.Text(), nullable=False),
     sa.Column('is_gmo', sa.Boolean(), nullable=False),
     sa.Column('is_organic', sa.Boolean(), nullable=False),
     sa.Column('is_vegetarian', sa.Boolean(), nullable=False),
     sa.Column('is_vegan', sa.Boolean(), nullable=False),
+    sa.Column('image_url', sa.Text(), nullable=True),
     sa.PrimaryKeyConstraint('barcode')
     )
     op.create_table('user',

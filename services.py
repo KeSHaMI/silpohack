@@ -9,6 +9,7 @@ async def _find_product_info_by_barcode(barcode: str) -> Product:
     general_info: dict = _get_product_info(barcode)
     components = general_info.pop('components')
     product = Product(**general_info)
+    product = await product.save()
     for component_name in components:
         component_data = await redis.client.get(component_name)
         if component_data:
@@ -19,9 +20,10 @@ async def _find_product_info_by_barcode(barcode: str) -> Product:
             except ormar.NoMatch:
                 # contains all component's fields
                 component_data: dict = _get_component_info_by_name(component_name)
-                await redis.client.set(component_name, component_data, ex=3600)
                 component = Component(**component_data)
-        product.components.append(component)
+                await component.save()
+                await redis.client.set(component_name, component_data, ex=3600)
+        await product.components.add(component)
     return product
 
 
