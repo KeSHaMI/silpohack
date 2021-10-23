@@ -1,7 +1,18 @@
 import ormar
+from typing import Optional
 
 import redis
 from models import Product, Component
+
+
+async def _create_or_update_component(component_name: str, component_id: Optional[int] = None):
+    component_data: dict = _get_component_info_by_name(component_name.lower())
+    if component_id:
+        component_data['id'] = component_data
+    component = Component(**component_data)
+    component = await component.upsert()
+    await redis.client.set(component_name, component_data, ex=3600)
+    return component
 
 
 async def _find_product_info_by_barcode(barcode: str) -> Product:
@@ -16,13 +27,12 @@ async def _find_product_info_by_barcode(barcode: str) -> Product:
             component = Component(**component_data)
         else:
             try:
-                component = Component.objects.get(name=component_name)
+                component = Component.objects.get(name=component_name, is_autocreated=False)
+                component = _create_or_update_component(component.name, component.id)
             except ormar.NoMatch:
                 # contains all component's fields
-                component_data: dict = _get_component_info_by_name(component_name)
-                component = Component(**component_data)
-                await component.save()
-                await redis.client.set(component_name, component_data, ex=3600)
+                component = _create_or_update_component(component_name)
+
         await product.components.add(component)
     return product
 

@@ -1,3 +1,5 @@
+import ormar
+
 import redis
 import json
 from typing import List
@@ -36,10 +38,21 @@ async def user_blacklist(request: Request):
     return components
 
 
-@router.post('/blacklist/{component_id}')
-async def add_to_blacklist(request: Request, component_id: int):
+component_input = Component.get_pydantic(include={'name'})
+
+
+@router.post('/blacklist/')
+async def add_to_blacklist(request: Request, component_data: component_input):
     user: User = request.scope.get('authenticated_user')
-    component = await Component.objects.get(id=component_id)
+    try:
+        component = await Component.objects.get(name=component_data.name)
+    except ormar.NoMatch:
+        component = await Component.objects.create(
+            name=component_data.name.lower(),
+            is_autocreated=True,
+            is_healthy=False,
+            description=''
+        )
     await user.add_component_to_blacklist(component)
     return JSONResponse({'ok': True})
 

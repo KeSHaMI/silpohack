@@ -24,6 +24,7 @@ class Component(ormar.Model):
     name: str = ormar.Text(index=True)
     description: str = ormar.Text()
     is_blacklisted: bool = ormar.Boolean(pydantic_only=True, default=False)
+    is_autocreated: bool = ormar.Boolean(default=False)
     # products: List['Product']
 
 
