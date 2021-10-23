@@ -4,11 +4,6 @@ import redis
 from models import Product, Component
 
 
-async def cache_product_response(product: Product):
-    data = product.json()
-    await redis.client.set(product.barcode, data, ex=3600)
-
-
 async def _find_product_info_by_barcode(barcode: str) -> Product:
     # contains all product's fields and component's names as list of strings
     general_info: dict = _get_product_info(barcode)
@@ -32,7 +27,7 @@ async def _find_product_info_by_barcode(barcode: str) -> Product:
 
 async def get_product_by_barcode(barcode: str) -> Product:
     try:
-        product: Product = await Product.objects.get(barcode=barcode)
+        product: Product = await Product.objects.select_related('components').get(barcode=barcode)
     except ormar.NoMatch:
         # DS part
         product = await _find_product_info_by_barcode(barcode)

@@ -6,26 +6,25 @@ from fastapi import Request, APIRouter
 from fastapi.responses import JSONResponse
 
 from models import Product, Component, User
-from services import get_product_by_barcode, cache_product_response
+from services import get_product_by_barcode
 
 
 router = APIRouter()
 
 
-@router.get('/product/{barcode}/', response_model=Product.get_pydantic())
-async def get_product(barcode: str):
-    cached_product_data = redis.client.get(barcode)
-    if cached_product_data:
-        return Product(**cached_product_data)
+@router.get('/product/{barcode}/', response_model=Product.get_pydantic(exclude={'DECIMAL_PARAMS'}))
+async def get_product(request: Request, barcode: str):
+    user: User = request.scope.get('authenticated_user')
     product: Product = await get_product_by_barcode(barcode)
-    await cache_product_response(product)
+    for comp in product.components:
+        comp.is_blacklisted = comp.id in user.blacklist
     return product
 
 
-@router.get('/blacklist', response_model=List[Component.get_pydantic(include={'id', 'name'})])
+@router.get('/blacklist', response_model=List[Component.get_pydantic(include={'id', 'name', 'is_blacklisted'})])
 async def user_blacklist(request: Request):
-    user: User = request.authenticated_user
-    blacklist = json.loads(user.blacklist)
+    user: User = request.scope.get('authenticated_user')
+    blacklist = user.blacklist
     components = []
     for component_id in blacklist:
         component = await Component.objects.get(id=component_id)
@@ -35,7 +34,7 @@ async def user_blacklist(request: Request):
 
 @router.post('/blacklist/{component_id}')
 async def add_to_blacklist(request: Request, component_id: int):
-    user: User = request.authenticated_user
+    user: User = request.scope.get('authenticated_user')
     component = await Component.objects.get(id=component_id)
     await user.add_component_to_blacklist(component)
     return JSONResponse({'ok': True})
@@ -43,7 +42,7 @@ async def add_to_blacklist(request: Request, component_id: int):
 
 @router.delete('/blacklist/{component_id}')
 async def remove_from_blacklist(request: Request, component_id: int):
-    user: User = request.authenticated_user
+    user: User = request.scope.get('authenticated_user')
     component = await Component.objects.get(id=component_id)
     await user.remove_component_from_blacklist(component)
     return JSONResponse({'ok': True})

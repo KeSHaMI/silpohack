@@ -15,12 +15,12 @@ class Product(ormar.Model):
     barcode: str = ormar.String(max_length=15, primary_key=True)
     name: str = ormar.Text()
 
-    proteins: Decimal = ormar.Decimal(**DECIMAL_PARAMS)
-    fats: Decimal = ormar.Decimal(**DECIMAL_PARAMS)
-    carbohydrates: Decimal = ormar.Decimal(**DECIMAL_PARAMS)
-    calories: Decimal = ormar.Decimal(**DECIMAL_PARAMS)
+    proteins: float = ormar.Decimal(**DECIMAL_PARAMS)
+    fats: float = ormar.Decimal(**DECIMAL_PARAMS)
+    carbohydrates: float = ormar.Decimal(**DECIMAL_PARAMS)
+    calories: float = ormar.Decimal(**DECIMAL_PARAMS)
 
-    mass: Decimal = ormar.Decimal(**DECIMAL_PARAMS)
+    mass: float = ormar.Decimal(**DECIMAL_PARAMS)
 
     package: str = ormar.Text()
 
@@ -30,7 +30,7 @@ class Product(ormar.Model):
     is_vegetarian: bool = ormar.Boolean()
     is_vegan: bool = ormar.Boolean()
 
-    components: List[Component] = ormar.ManyToMany(Component)
+    components: List[Component.get_pydantic()] = ormar.ManyToMany(Component)
 
     @property
     def image_path(self) -> str:

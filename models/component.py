@@ -1,4 +1,5 @@
 import ormar
+import pydantic
 
 from db import BaseMeta
 
@@ -22,6 +23,7 @@ class Component(ormar.Model):
     positivity: str = ormar.String(max_length=8, choices=POSITIVITY_CHOICES)
     name: str = ormar.Text(index=True)
     description: str = ormar.Text()
+    is_blacklisted: bool = ormar.Boolean(pydantic_only=True, default=False)
     # products: List['Product']
 
 

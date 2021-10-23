@@ -16,7 +16,7 @@ class User(ormar.Model):
     blacklist: pydantic.Json = ormar.JSON(default=[])
 
     async def add_component_to_blacklist(self, component: Component):
-        current_blacklist: list = json.loads(self.blacklist)
+        current_blacklist: list = self.blacklist
         if component.id in current_blacklist:
             return
         else:
@@ -25,7 +25,7 @@ class User(ormar.Model):
         await self.upsert()
 
     async def remove_component_from_blacklist(self, component: Component):
-        current_blacklist: list = json.loads(self.blacklist)
+        current_blacklist: list = self.blacklist
         if component.id not in current_blacklist:
             return
         else:
