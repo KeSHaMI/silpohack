@@ -1,0 +1,11 @@
+[Unit]
+Description=silpohack
+
+[Service]
+User=root
+WorkingDirectory=/root/code/silpohack
+ExecStart=python3 main.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
