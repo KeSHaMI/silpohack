@@ -131,7 +131,7 @@ def scraping_product(id):
         if href:
             prod_link = 'https://listex.info/' + link.get('href')
         else:
-            qr_html_text
+            print(qr_html_text)
 
     prod_html_text = requests.get(prod_link).text
     prod_soup = BeautifulSoup(prod_html_text, 'lxml')
