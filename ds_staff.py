@@ -314,6 +314,7 @@ def runn(id):
     json = scraping_product(id)
 
     mass = json.get('components')
+    s = ','.join(mass)
     mass1 = []
     check_mass = []
 
