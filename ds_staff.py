@@ -313,8 +313,7 @@ def form_component(component_name: str) -> dict:
 def runn(id):
     json = scraping_product(id)
 
-    s = json.get('components')
-    mass = s.split(',')
+    mass = json.get('components')
     mass1 = []
     check_mass = []
 
