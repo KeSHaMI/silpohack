@@ -302,6 +302,8 @@ def main(query):
                 return rating, text
             else:
                 return 1, ''
+        else:
+            return 1, ''
     except Exception as e:
         print(e)
         return 1, ''
