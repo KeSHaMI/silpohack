@@ -58,8 +58,8 @@ async def add_to_blacklist(request: Request, component_data: component_input):
             description=''
         )
     except ormar.MultipleMatches:
-        components = await Component.objects.filter(name=component_data.name)
-        raise fastapi.HTTPException(status_code=404, detail=components)
+        components = Component.objects.filter(name=component_data.name)
+        raise fastapi.HTTPException(status_code=404, detail=list(components))
         component = await Component.objects.first()
         await component.delete()
         component = await Component.objects.first()
