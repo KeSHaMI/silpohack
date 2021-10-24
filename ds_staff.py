@@ -176,28 +176,28 @@ def scraping_product(id):
         elif 'Жиры, г/100мл' in ans:
             fats = ans[ans.index('Жиры, г/100мл') + 1].replace('&lt;', '')
         else:
-            fats = 'НЕТ'
+            fats = '0'
 
         if 'Углеводы, г/100г' in ans:
             carbohydrates = ans[ans.index('Углеводы, г/100г') + 1].replace('&lt;', '')
         elif 'Углеводы, г/100мл' in ans:
             carbohydrates = ans[ans.index('Углеводы, г/100мл') + 1].replace('&lt;', '')
         else:
-            carbohydrates = 'НЕТ'
+            carbohydrates = '0'
 
         if 'Белки, г/100г' in ans:
             proteins = ans[ans.index('Белки, г/100г') + 1].replace('&lt;', '')
         elif 'Белки, г/100мл' in ans:
             proteins = ans[ans.index('Белки, г/100мл') + 1].replace('&lt;', '')
         else:
-            proteins = 'НЕТ'
+            proteins = '0'
 
         if 'Калорийность, ккал/100г' in ans:
             calories = ans[ans.index('Калорийность, ккал/100г') + 1].replace('&lt;', '')
         elif 'Калорийность, ккал/100мл' in ans:
             calories = ans[ans.index('Калорийность, ккал/100мл') + 1].replace('&lt;', '')
         else:
-            calories = 'НЕТ'
+            calories = '0'
 
     except Exception as e:
         print(e)
@@ -313,8 +313,8 @@ def form_component(component_name: str) -> dict:
 def runn(id):
     json = scraping_product(id)
 
-    mass = json.get('components')
-    s = ','.join(mass)
+    s = json.get('components')
+    mass = s.split(',')
     mass1 = []
     check_mass = []
 
@@ -335,15 +335,6 @@ def runn(id):
                 mass1.append(tt)
         except Exception as e:
             print(e)
-
-    component_vs_rating = []
-
-    for j in mass1:
-        try:
-            component_vs_rating.append(main(j))
-        except Exception as e:
-            print(e)
-            print(main(j))
 
     component_names: List[str] = str(mass1).replace('[', '').replace(']', '').replace("'", '').split(',')
     json["components"] = [comp_name.strip() for comp_name in component_names]
