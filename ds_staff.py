@@ -1,8 +1,7 @@
 
 # !pip install html2text
 # !pip install google_trans_new
-
-
+import time
 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import html2text
@@ -258,9 +257,7 @@ def scraping_product(id):
     except:
         ans1 = [0, 0, 0, 0]
 
-    page = requests.get(prod_link)
-    soup = BeautifulSoup(page.text)
-    images = soup.findAll('img')
+    images = prod_soup.findAll('img')
     img = ''
     for image in images:
         if re.findall(r'https://', image['src']):
