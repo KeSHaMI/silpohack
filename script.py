@@ -46,9 +46,9 @@ async def main():
 
 
 async def test():
-    print(await Product.objects.select_related("components").all())
+    # print(await Product.objects.select_related("components").all())
     # print(await Component.objects.all())
-    # print(await Product.objects.delete(each=True))
+    print(await Product.objects.delete(each=True))
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    asyncio.run(test())
