@@ -23,7 +23,10 @@ async def get_product(request: Request, barcode: str):
         comp.is_blacklisted = comp.id in user.blacklist
         if comp.is_healthy:
             healthy_count += 1
-    product.healthy_components_percentage = str(round(healthy_count / len(product.components) * 100, 2))
+    if product.components:
+        product.healthy_components_percentage = str(round(healthy_count / len(product.components) * 100, 2))
+    else:
+        product.healthy_components_percentage = str('100.00')
     return product
 
 
