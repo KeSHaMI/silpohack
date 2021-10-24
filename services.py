@@ -21,6 +21,8 @@ async def _find_product_info_by_barcode(barcode: str) -> Product:
     # contains all product's fields and component's names as list of strings
     general_info: dict = get_product_info(barcode)
     components = general_info.pop('components')
+    if not general_info.get('image_url'):
+        general_info.pop('image_url')
     product = Product(**general_info)
     product = await product.save()
     for component_name in components:
