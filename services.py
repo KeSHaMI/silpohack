@@ -12,8 +12,8 @@ async def _create_or_update_component(component_name: str, component_id: Optiona
     component_data: dict = get_component_info_by_name(component_name.lower())
     if component_id:
         component_data['id'] = component_data
+        component_data['is_autocreated'] = False
     component = Component(**component_data)
-    await redis.client.set(component_name, json.dumps(component_data), ex=3600)
     return component
 
 
@@ -28,20 +28,14 @@ async def _find_product_info_by_barcode(barcode: str) -> Product:
     product = Product(**general_info)
     product = await product.save()
     for component_name in components:
-        component_data = await redis.client.get(component_name)
-        if component_data:
-            component_data = json.loads(component_data)
-            component = Component(**component_data)
-            await component.save()
-        else:
-            try:
-                component = await Component.objects.get(name=component_name, is_autocreated=False)
-                component = await _create_or_update_component(component.name, component.id)
-            except ormar.NoMatch:
-                # contains all component's fields
-                component = await _create_or_update_component(component_name)
-                await component.save()
-
+        try:
+            component = await Component.objects.get(name=component_name, is_autocreated=False)
+            component = await _create_or_update_component(component.name, component.id)
+            component = await component.save()
+        except ormar.NoMatch:
+            # contains all component's fields
+            component = await _create_or_update_component(component_name)
+            component = await component.save()
         await product.components.add(component)
     return product
 

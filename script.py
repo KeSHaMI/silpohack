@@ -51,4 +51,4 @@ async def test():
     print(await Product.objects.delete(each=True))
 
 if __name__ == '__main__':
-    asyncio.run(test())
+    asyncio.run(main())

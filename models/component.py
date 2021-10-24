@@ -9,16 +9,6 @@ class Component(ormar.Model):
     class Meta(BaseMeta):
         tablename = 'component'
 
-    POSITIVITY_GREEN = 'green'
-    POSITIVITY_YELLOW = 'yellow'
-    POSITIVITY_RED = 'red'
-
-    POSITIVITY_CHOICES = [
-        POSITIVITY_GREEN,
-        POSITIVITY_YELLOW,
-        POSITIVITY_RED,
-    ]
-
     id: int = ormar.Integer(primary_key=True, autoincrement=True)
     is_healthy = ormar.Boolean()
     name: str = ormar.Text(index=True, unique=True)
