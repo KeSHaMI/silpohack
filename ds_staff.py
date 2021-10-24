@@ -124,8 +124,9 @@ def scraping_product(id):
 
     qr_url = f'https://listex.info/search/?q={qr_id}&type=goods'
     # qr_html_text=requests.get(qr_url, headers = {'User-agent': 'your bot 0.1'}).text
-    qr_html_text = requests.get(qr_url).text
-    qr_soup = BeautifulSoup(qr_html_text, 'lxml')
+    qr_html_text = requests.get(qr_url)
+    status = qr_html_text.status_code
+    qr_soup = BeautifulSoup(qr_html_text.text, 'lxml')
     prod_link = ''
     for link in qr_soup.find_all('a', class_='link-gray'):
         href = re.match(r'.product.', link.get('href'))
@@ -133,7 +134,7 @@ def scraping_product(id):
             prod_link = 'https://listex.info/' + link.get('href')
 
     if not prod_link:
-        raise Exception(qr_html_text)
+        raise Exception(status)
 
     prod_html_text = requests.get(prod_link).text
     prod_soup = BeautifulSoup(prod_html_text, 'lxml')
