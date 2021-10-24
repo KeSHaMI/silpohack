@@ -57,12 +57,6 @@ async def add_to_blacklist(request: Request, component_data: component_input):
             is_healthy=False,
             description=''
         )
-    except ormar.MultipleMatches:
-        components = Component.objects.filter(name=component_data.name)
-        raise Exception(list(components))
-        component = await Component.objects.first()
-        await component.delete()
-        component = await Component.objects.first()
     await user.add_component_to_blacklist(component)
     return JSONResponse({'ok': True})
 
