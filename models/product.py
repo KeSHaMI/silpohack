@@ -9,7 +9,7 @@ from .component import Component
 
 
 def get_rand_price() -> float:
-    return round(random.uniform(1.0, 99.0), 2)
+    return round(random.uniform(10.0, 35.0), 2)
 
 
 DEFAULT_PHOTO_URL = 'https://e7.pngegg.com/pngimages/140/347/png-clipart-grocery-store-shopping-list-food-icon-a-bag-of-food-text-hand.png'
