@@ -2,6 +2,7 @@
 # !pip install html2text
 # !pip install google_trans_new
 import time
+from fastapi import HTTPException
 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import html2text
@@ -134,7 +135,7 @@ def scraping_product(id):
             prod_link = 'https://listex.info/' + link.get('href')
 
     if not prod_link:
-        raise Exception(status)
+        raise HTTPException(status_code=404)
 
     prod_html_text = requests.get(prod_link).text
     prod_soup = BeautifulSoup(prod_html_text, 'lxml')
