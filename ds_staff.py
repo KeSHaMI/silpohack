@@ -245,8 +245,9 @@ def scraping_product(id):
         description = str(prod_soup).split('Состав товара')[1].split('<div')[0]
         components = remove_html_tags(description).replace('\n', '').replace('\t', '').split('Состав (рус.)')[1].split(
             'Состав (укр.)')[0].replace('  ', '')
-    except:
-        components = []
+    except Exception as e:
+        print(e)
+        components = ''
 
     try:
         package1 = str(prod_soup).replace('\n', '').replace('\t', '').split('Упаковка    ')[1].split('<div')[0]
@@ -291,12 +292,14 @@ def main(query):
         if rating == -1:
             rating = get_rating(get_text_from_wiki(query))
             # text = translator.translate(get_text_from_wiki(query), lang_src='en',lang_tgt='ru')
-            text = get_text_from_wiki(query)
-            text = re.sub(r'\[[^\]]+\]', '', text)
-            if text == 'У Википедии нет статьи с таким именем. ':
-                rating = 1
-            return rating, text
-        return rating
+            if query:
+                text = get_text_from_wiki(query)
+                text = re.sub(r'\[[^\]]+\]', '', text)
+                if text == 'У Википедии нет статьи с таким именем. ':
+                    rating = 1
+                return rating, text
+            else:
+                return 1, ''
     except Exception as e:
         print(e)
         return 1, ''
@@ -337,7 +340,7 @@ def runn(id):
             print(e)
 
     component_names: List[str] = str(mass1).replace('[', '').replace(']', '').replace("'", '').split(',')
-    json["components"] = [comp_name.strip() for comp_name in component_names]
+    json["components"] = [comp_name.strip() for comp_name in component_names if comp_name]
 
     garbage_disposal = {
         "стекло": "Выбрасываем: бутылки, банки, стеклобой (битый тара) от напитков, лекарственных средств и т.п.",
@@ -360,4 +363,4 @@ def runn(id):
 
 
 if __name__ == '__main__':
-    print(runn(5999860497875))
+    print(runn(4823063109017))
