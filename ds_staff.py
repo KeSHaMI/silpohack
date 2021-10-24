@@ -354,9 +354,9 @@ def runn(id):
     elif 'метал' in s or 'алюминий' in s or 'сталь' in s:
         recycling = garbage_disposal.get('сухая фракция')
     elif 'картон' in s or 'пакет' in s:
-        recycling = garbage_disposal.get('сумага')
+        recycling = garbage_disposal.get('бумага')
     else:
-        recycling = garbage_disposal.get('сластик')
+        recycling = garbage_disposal.get('пластик')
 
     json["utilize"] = recycling if recycling else ''
     return json
