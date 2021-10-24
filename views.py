@@ -59,7 +59,7 @@ async def add_to_blacklist(request: Request, component_data: component_input):
         )
     except ormar.MultipleMatches:
         components = Component.objects.filter(name=component_data.name)
-        raise Exception(components)
+        raise Exception(list(components))
         component = await Component.objects.first()
         await component.delete()
         component = await Component.objects.first()
